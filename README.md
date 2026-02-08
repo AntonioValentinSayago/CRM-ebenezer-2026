@@ -1,89 +1,73 @@
-# 🧠 Next.js & React Projects Monorepo
+# React + TypeScript + Vite
 
-This repository contains a collection of web applications built with Next.js and React. Each project explores different use cases and modern front-end development practices including server-side rendering, static site generation, API integration, authentication, and UI/UX patterns.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 🧱 Repository Structure
+Currently, two official plugins are available:
 
-/
-├── README.md
-├── projects/
-│ ├── blog-app/
-│ ├── ecommerce-store/
-│ ├── portfolio-site/
-│ ├── dashboard-auth/
-│ └── api-consumer/
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## React Compiler
 
-## 🚀 Projects Overview
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### 1. 📚 blog-app
+## Expanding the ESLint configuration
 
-A fully functional markdown-based blog powered by Next.js static site generation (SSG).
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- Dynamic routing for blog posts  
-- Markdown parsing and code highlighting  
-- SEO optimization with next/head  
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-📁 Path: /projects/blog-app
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
----
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-### 2. 🛒 ecommerce-store
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-An eCommerce storefront with shopping cart functionality and product browsing.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-- Product listing with pagination  
-- Shopping cart using React Context  
-- Stripe integration (test mode)  
-
-📁 Path: /projects/ecommerce-store
-
----
-
-### 3. 💼 portfolio-site
-
-A responsive and personal portfolio website with dynamic project pages.
-
-- Static site generation (SSG)  
-- Contact form via Formspree  
-- Responsive design with animations  
-
-📁 Path: /projects/portfolio-site
-
----
-
-### 4. 🔐 dashboard-auth
-
-A secure dashboard interface with JWT-based authentication and protected routes.
-
-- Login and registration with password hashing  
-- Token-based session management (JWT)  
-- Middleware for route protection  
-
-📁 Path: /projects/dashboard-auth
-
----
-
-### 5. 🌐 api-consumer
-
-A frontend-only app that fetches and displays data from public APIs.
-
-- Search and filter capabilities  
-- Optimized API calls with SWR  
-- Loading and error state UX  
-
-📁 Path: /projects/api-consumer
-
----
-
-## 📦 Getting Started
-
-To run any project:
-
-```bash
-cd projects/<project-name>
-npm install
-npm run dev
-
-
-Puedes pegar este contenido directamente en tu archivo README.md. Si deseas que incluya enlaces o badges automáticos de GitHub Actions, cobertura, etc., házmelo saber.
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
