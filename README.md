@@ -1,4 +1,4 @@
-# React + TypeScript + Vite CRM - EBENEZER
+# React + TypeScript - CRM - EBENEZER - 2026 1.0.0
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
